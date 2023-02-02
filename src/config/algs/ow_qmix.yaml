@@ -1,0 +1,86 @@
+# use epsilon greedy action selector
+action_selector: "epsilon_greedy"
+epsilon_start: 0.995
+epsilon_finish: 0.05
+epsilon_anneal_time: 100000 #100000
+# 50000 -> 1000000??
+
+runner: "parallel"
+batch_size_run: 8
+buffer_size: 5000
+
+batch_size: 128
+
+critic_mac: "cate_broadcast_comm_mac_full"
+critic_agent: "rnn_agent_n"
+
+# Comm
+comm: True
+comm_embed_dim: 3
+comm_method: "information_bottleneck_full"
+c_beta: 1.
+comm_beta: 0.001
+comm_entropy_beta: 1e-6
+gate_loss_beta: 0.00001
+only_downstream: False
+use_IB: True
+is_print: False
+
+is_comm_beta_decay: False
+comm_beta_start_decay: 20000000
+comm_beta_target: 1e-2
+comm_beta_end_decay: 50000000
+
+is_comm_entropy_beta_decay: False
+comm_entropy_beta_start_decay: 20000000
+comm_entropy_beta_target: 1e-4
+comm_entropy_beta_end_decay: 50000000
+
+is_cur_mu: False
+is_rank_cut_mu: False
+cut_mu_thres: 1.
+cut_mu_rank_thres: 80.0
+
+
+
+
+# update the target network every {} episodes
+target_update_interval: 200
+t_max: 2005000
+
+
+# use the Q_Learner to train
+#agent_output_type: "pi_logits"
+mac : "basic_mac_logits"
+agent: "rnn" # Default rnn agent
+agent_output_type: "q"
+learner: "max_q_learner"
+double_q: True
+mixer: "qmix"
+mixing_embed_dim: 32
+hypernet_layers: 2
+hypernet_embed: 64
+
+central_loss: 1
+qmix_loss: 1
+w: 0.5 #0.1 # $\alpha$ in the paper
+hysteretic_qmix: True # False -> CW-QMIX, True -> OW-QMIX
+
+central_mixing_embed_dim: 256
+central_action_embed: 1
+central_mac: "basic_central_mac"
+central_agent: "central_rnn"
+central_rnn_hidden_dim: 64
+central_mixer: "ff"
+td_lambda: 0.6
+lr: 0.001
+
+alpha_lr: 3e-4
+alpha_init: -0.07
+#critic_agent: "rnn_agent_logits"
+#critic_mac: "cate_broadcast_comm_mac_full"
+#critic_agent: "rnn"
+#critic_mac: "basic_mac"
+
+
+name: "ow_qmix_env=8_adam_td_lambda"
